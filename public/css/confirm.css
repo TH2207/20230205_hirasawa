@@ -1,0 +1,13 @@
+.confirm-back {
+  background-color: white;
+  display: block;
+  margin: 0 auto;
+  font-size: 12px;
+  padding: 0;
+  border: none;
+  text-decoration: underline;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
