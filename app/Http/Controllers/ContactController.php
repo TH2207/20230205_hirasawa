@@ -10,6 +10,7 @@ class ContactController extends Controller
 {
     public function index(Request $request)
     {
+        // 初期設定(修正ボタン押下時はフラッシュデータを設定)
         $data = [
             'fname' => $request->session()->get('fname'),
             'gname' => $request->session()->get('gname'),
@@ -25,15 +26,7 @@ class ContactController extends Controller
 
     public function confirm(ContactRequest $request)
     {
-        // $request->session()->flash('fname', $request->fname);
-        // $request->session()->flash('gname', $request->gname);
-        // $request->session()->flash('gender', $request->gender);
-        // $request->session()->flash('email', $request->email);
-        // $request->session()->flash('postcode', $request->postcode);
-        // $request->session()->flash('address', $request->address);
-        // $request->session()->flash('building_name', $request->building_name);
-        // $request->session()->flash('opinion', $request->opinion);
-
+        // 登録データを保存
         $param = [
             'fname' => $request->fname,
             'gname' => $request->gname,
@@ -49,6 +42,7 @@ class ContactController extends Controller
 
     public function register(ContactRequest $request)
     {
+        // 登録データをフラッシュデータに保存
         $request->session()->flash('fname', $request->fname);
         $request->session()->flash('gname', $request->gname);
         $request->session()->flash('gender', $request->gender);
@@ -58,10 +52,12 @@ class ContactController extends Controller
         $request->session()->flash('building_name', $request->building_name);
         $request->session()->flash('opinion', $request->opinion);
 
+        // 修正するボタン押下時は登録画面に戻る
         if ($request->has("back")) {
             return redirect('/');
         }
 
+        // データベースへの登録準備
         $param = [
             'fullname' => $request->fname . ' ' . $request->gname,
             'gender' => $request->gender,
@@ -72,11 +68,11 @@ class ContactController extends Controller
             'opinion' => $request->opinion,
         ];
 
-        // $form = $request->all();
-        // Contact::create($param);
+        // データベースへ登録
         $contact = new Contact;
         $contact->fill($param)->save();
 
+        // フラッシュデータ削除
         $request->session()->flush();
 
         return view('finish');
